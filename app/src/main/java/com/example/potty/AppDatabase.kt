@@ -12,7 +12,7 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
         CollegeFeeEntity::class,
         UserProfileEntity::class
     ],
-    version = 12, // Stable build version. See comments below for Encryption.
+up    version = 20, // Finalized encrypted build version
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -27,24 +27,22 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                // TO ACTIVATE DATABASE ENCRYPTION:
-                // 1. Resolve net.zetetic:sqlcipher-android dependency in build.gradle.
-                // 2. Uncomment the lines below and the SupportOpenHelperFactory import.
-                // val passphrase = DatabaseKeyManager.getDatabasePassphrase(context)
-                // val factory = SupportOpenHelperFactory(passphrase)
-                
+                val passphrase = DatabaseKeyManager.getDatabasePassphrase(context)
+                val factory = SupportOpenHelperFactory(passphrase)
+
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "potty_database"
+                    "potty_database_v2" // Renamed to force fresh start
                 )
-                // .openHelperFactory(factory)
-                .fallbackToDestructiveMigration()
-                .build()
+                    .openHelperFactory(factory)
+                    .fallbackToDestructiveMigration(dropAllTables = true)
+                    .build()
                 INSTANCE = instance
                 instance
             }
         }
+
     }
 }
 
