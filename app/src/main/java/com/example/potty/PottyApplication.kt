@@ -12,4 +12,10 @@ class PottyApplication : Application() {
             database.userProfileDao()
         ) 
     }
+
+    override fun onCreate() {
+        super.onCreate()
+        // Initialize SQLCipher native library for modern SDK
+        System.loadLibrary("sqlcipher")
+    }
 }

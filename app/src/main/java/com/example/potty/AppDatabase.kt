@@ -3,6 +3,7 @@ package com.example.potty
 import android.content.Context
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
 @Database(
     entities = [
@@ -27,9 +28,9 @@ abstract class AppDatabase : RoomDatabase() {
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 // TO ACTIVATE DATABASE ENCRYPTION:
-                // 1. Uncomment the lines below and the SupportOpenHelperFactory import.
-                // 2. Ensure net.zetetic:android-database-sqlcipher is resolved in build.gradle.
-                // val passphrase = DatabaseKeyManager.getOrCreateKey()
+                // 1. Resolve net.zetetic:sqlcipher-android dependency in build.gradle.
+                // 2. Uncomment the lines below and the SupportOpenHelperFactory import.
+                // val passphrase = DatabaseKeyManager.getDatabasePassphrase(context)
                 // val factory = SupportOpenHelperFactory(passphrase)
                 
                 val instance = Room.databaseBuilder(

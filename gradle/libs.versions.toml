@@ -14,19 +14,19 @@ lifecycle = "2.8.7"
 composeBom = "2024.10.01"
 activityCompose = "1.9.3"
 coil = "2.7.0"
-datastore = "1.1.2"
+datastore = "1.2.1"
 work = "2.11.2"
 credentials = "1.3.0"
 googleid = "1.1.1"
 biometric = "1.2.0-alpha05"
-sqlcipher = "4.5.4"
-androidxGraphicsPath = "1.0.1"
+sqlcipher = "4.17.0"
+androidxGraphicsPath = "1.1.0"
 androidxSqlite = "2.4.0"
 
 [libraries]
 androidx-graphics-path = { group = "androidx.graphics", name = "graphics-path", version.ref = "androidxGraphicsPath" }
 androidx-sqlite-ktx = { group = "androidx.sqlite", name = "sqlite-ktx", version.ref = "androidxSqlite" }
-sqlcipher = { group = "net.zetetic", name = "android-database-sqlcipher", version.ref = "sqlcipher" }
+sqlcipher = { group = "net.zetetic", name = "sqlcipher-android", version.ref = "sqlcipher" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
