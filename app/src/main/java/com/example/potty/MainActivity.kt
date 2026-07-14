@@ -237,15 +237,6 @@ fun LoginScreen(viewModel: PottyViewModel) {
             Icon(Icons.Default.Login, contentDescription = null)
             Text("Login with Google", modifier = Modifier.padding(start = 12.dp))
         }
-
-        TextButton(
-            onClick = { 
-                viewModel.updateProfile(UserProfileEntity(googleId = "local_user", fullName = "Anonymous User"))
-            }, 
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
-            Text("Skip for now", color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
     }
 }
 
@@ -1690,8 +1681,9 @@ fun PersonalInfoScreen(viewModel: PottyViewModel, onBack: () -> Unit) {
             navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, null) } },
             actions = { 
                 TextButton(onClick = {
+                    val currentId = profile?.googleId ?: return@TextButton
                     viewModel.updateProfile(UserProfileEntity(
-                        googleId = profile?.googleId ?: "local_user",
+                        googleId = currentId,
                         fullName = name,
                         college = college,
                         course = course,

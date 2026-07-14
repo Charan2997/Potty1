@@ -12,7 +12,7 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
         CollegeFeeEntity::class,
         UserProfileEntity::class
     ],
-up    version = 20, // Finalized encrypted build version
+   version = 20, // Finalized encrypted build version
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
