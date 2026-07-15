@@ -42,11 +42,18 @@ object DatabaseKeyManager {
                 createNewPassphrase(prefs)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-            // Recovery: If decryption fails (e.g. key invalidated), clear and create new
-            // This will cause a destructive migration (DB wipe) which is better than a crash
+            if (BuildConfig.DEBUG) e.printStackTrace()
+            // Recovery: If decryption fails (e.g. key invalidated), clear database and create new
+            // This prevents a SQLiteNotADatabaseException crash loop
+            deleteExistingDatabase(context)
             createNewPassphrase(prefs)
         }
+    }
+
+    private fun deleteExistingDatabase(context: Context) {
+        val dbName = "potty_secure_v1"
+        context.deleteDatabase(dbName)
+        // deleteDatabase() already handles -wal and -shm files internally
     }
 
     private fun createNewPassphrase(prefs: android.content.SharedPreferences): ByteArray {
