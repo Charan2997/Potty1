@@ -80,8 +80,8 @@ class MainActivity : FragmentActivity() {
                             Icon(painterResource(id = R.drawable.ic_app_logo), null, modifier = Modifier.size(80.dp), tint = MaterialTheme.colorScheme.primary)
                         }
                     }
-                    profile == null -> {
-                        // Always show login if no profile exists
+                    profile == null || profile?.googleId == "local_user" -> {
+                        // Always show login if no profile exists or legacy local_user exists
                         LoginScreen(viewModel)
                     }
                     securityEnabled == true && isLocked -> {
@@ -172,7 +172,7 @@ fun LoginScreen(viewModel: PottyViewModel) {
             tint = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(32.dp))
-        Text("Welcome to Potty", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Text("Welcome to Potty", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
         Text("Track your finances with ease.", color = MaterialTheme.colorScheme.onSurfaceVariant)
         
         if (errorMessage != null) {

@@ -53,7 +53,11 @@ class PottyViewModel(application: Application, private val repository: ExpenseRe
     @OptIn(ExperimentalCoroutinesApi::class)
     val expenses: StateFlow<List<ExpenseEntity>> = userProfile
         .flatMapLatest { profile ->
-            repository.getAllExpenses(profile?.googleId ?: "local_user")
+            if (profile?.googleId != null && profile.googleId != "local_user") {
+                repository.getAllExpenses(profile.googleId)
+            } else {
+                flowOf(emptyList())
+            }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -104,7 +108,11 @@ class PottyViewModel(application: Application, private val repository: ExpenseRe
     @OptIn(ExperimentalCoroutinesApi::class)
     val subscriptions: StateFlow<List<SubscriptionEntity>> = userProfile
         .flatMapLatest { profile ->
-            repository.getAllSubscriptions(profile?.googleId ?: "local_user")
+            if (profile?.googleId != null && profile.googleId != "local_user") {
+                repository.getAllSubscriptions(profile.googleId)
+            } else {
+                flowOf(emptyList())
+            }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -149,7 +157,11 @@ class PottyViewModel(application: Application, private val repository: ExpenseRe
     @OptIn(ExperimentalCoroutinesApi::class)
     val collegeFees: StateFlow<List<CollegeFeeEntity>> = userProfile
         .flatMapLatest { profile ->
-            repository.getAllFees(profile?.googleId ?: "local_user")
+            if (profile?.googleId != null && profile.googleId != "local_user") {
+                repository.getAllFees(profile.googleId)
+            } else {
+                flowOf(emptyList())
+            }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 

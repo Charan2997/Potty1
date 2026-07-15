@@ -33,21 +33,32 @@ object DatabaseKeyManager {
         val encryptedDekBase64 = prefs.getString(ENCRYPTED_PASSPHRASE_KEY, null)
         val ivBase64 = prefs.getString(IV_KEY, null)
 
-        return if (encryptedDekBase64 != null && ivBase64 != null) {
-            // Decrypt existing passphrase
-            decryptPassphrase(encryptedDekBase64, ivBase64)
-        } else {
-            // Generate, encrypt, and store new passphrase
-            val newPassphrase = generateRandomPassphrase()
-            val encryptionResult = encryptPassphrase(newPassphrase)
-            
-            prefs.edit()
-                .putString(ENCRYPTED_PASSPHRASE_KEY, encryptionResult.encryptedDek)
-                .putString(IV_KEY, encryptionResult.iv)
-                .apply()
-            
-            newPassphrase
+        return try {
+            if (encryptedDekBase64 != null && ivBase64 != null) {
+                // Decrypt existing passphrase
+                decryptPassphrase(encryptedDekBase64, ivBase64)
+            } else {
+                // Generate, encrypt, and store new passphrase
+                createNewPassphrase(prefs)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Recovery: If decryption fails (e.g. key invalidated), clear and create new
+            // This will cause a destructive migration (DB wipe) which is better than a crash
+            createNewPassphrase(prefs)
         }
+    }
+
+    private fun createNewPassphrase(prefs: android.content.SharedPreferences): ByteArray {
+        val newPassphrase = generateRandomPassphrase()
+        val encryptionResult = encryptPassphrase(newPassphrase)
+        
+        prefs.edit()
+            .putString(ENCRYPTED_PASSPHRASE_KEY, encryptionResult.encryptedDek)
+            .putString(IV_KEY, encryptionResult.iv)
+            .apply()
+        
+        return newPassphrase
     }
 
     private fun generateRandomPassphrase(): ByteArray {
