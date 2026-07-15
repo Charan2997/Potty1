@@ -12,7 +12,7 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
         CollegeFeeEntity::class,
         UserProfileEntity::class
     ],
-   version = 20, // Finalized encrypted build version
+    version = 25, // Significant bump for fresh start
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -33,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "potty_database_v2" // Renamed to force fresh start
+                    "potty_secure_v1" // New name for fresh start
                 )
                     .openHelperFactory(factory)
                     .fallbackToDestructiveMigration(dropAllTables = true)
